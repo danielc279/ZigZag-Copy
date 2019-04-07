@@ -100,4 +100,9 @@ public class TileManager : MonoBehaviour
 
 		//currentTile = (GameObject)Instantiate(tilePrefabs[randomIndex],currentTile.transform.GetChild(0).transform.GetChild(randomIndex).position, Quaternion.identity);
 	}
+
+	public void ResetGame()
+	{
+		Application.LoadLevel(Application.loadedLevel);
+	}
 }
