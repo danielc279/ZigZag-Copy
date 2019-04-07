@@ -15,30 +15,54 @@ public class PlayerScript : MonoBehaviour
 
     private bool isDead;
 
-    public Animator gameOverAnim;
+
 
     public GameObject resetBtn;
 
     public TextMeshProUGUI scoreUI;
-    public TextMeshProUGUI highscoreUI;
 
-    public TextMeshProUGUI[] scoreTexts;
-    public Image background;
+    public LayerMask whatIsGround;
+
+    public bool IsPlaying {get; set;}
+
+    public Transform contactPoint;
+
+
     public int score { get; private set; }
+
+    public MenuScript myMenuScript;
 
     // Start is called before the first frame update
     void Start()
     {
+        IsPlaying = true;
+        myMenuScript = GameObject.Find("GameManager").GetComponent<MenuScript>();
         score = 0;
         isDead = false;
         dir = Vector3.zero;
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!IsGrounded() && IsPlaying)
+        {
+            isDead = true;
+            IsPlaying = false;
+            myMenuScript.GameOver();
+
+            resetBtn.SetActive(true);
+
+            if (transform.childCount > 0)
+            {
+            transform.GetChild(0).transform.parent = null;
+            }
+        }
+
         if (Input.GetMouseButtonDown(0) && !isDead)
         {
+            IsPlaying = true;
             score++; 
             scoreUI.SetText(score.ToString());
 
@@ -69,46 +93,18 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    void OnTriggerExit(Collider other)
+    private bool IsGrounded()
     {
-        if (other.tag == "Tile")
-        {
-            RaycastHit hit;
+       Collider[] colliders = Physics.OverlapSphere(contactPoint.position,.5f, whatIsGround); 
 
-            Ray downRay = new Ray(transform.position, -Vector3.up);
+       for (int i = 0; i < colliders.Length; i++)
+       {
+           if (colliders[i].gameObject != gameObject)
+           {
+               return true;
+           }
+       }
 
-            if (!Physics.Raycast(downRay, out hit))
-            {
-                isDead = true;
-                GameOver();
-                resetBtn.SetActive(true);
-                if (transform.childCount > 0)
-                {
-                transform.GetChild(0).transform.parent = null;
-                }
-
-            }
-        }
-    }
-
-    private void GameOver()
-    {
-        gameOverAnim.SetTrigger("GameOver");
-        scoreTexts[1].SetText(score.ToString());
-
-        int bestScore = PlayerPrefs.GetInt("BestScore", 0);
-
-        if (score > bestScore)
-        {
-            PlayerPrefs.SetInt("BestScore", score);
-            highscoreUI.gameObject.SetActive(true);
-            background.color = new Color32(253,68,232,255);
-            foreach (TextMeshProUGUI txt in scoreTexts)
-            {
-                txt.color = new Color32(255,255,255,255);
-            }
-        }
-
-        scoreTexts[3].SetText(PlayerPrefs.GetInt("BestScore", 0).ToString());
+       return false;
     }
 }

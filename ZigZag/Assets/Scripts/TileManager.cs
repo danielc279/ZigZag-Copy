@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TileManager : MonoBehaviour 
 {
+	int spawnIndex = 1;
+
 	public GameObject[] tilePrefabs;
 
 	public GameObject currentTile;
@@ -76,12 +78,30 @@ public class TileManager : MonoBehaviour
 		}
 		int randomIndex = Random.Range(0,2);
 
-		if (randomIndex == 0)
+		if(spawnIndex > 4){
+			GameObject tmp = leftTiles.Pop();
+			tmp.SetActive(true);
+			tmp.transform.position = currentTile.transform.GetChild(0).transform.GetChild(0).position;
+			currentTile = tmp;
+
+			spawnIndex--;
+		}
+		else if(spawnIndex < -4){
+			GameObject tmp = topTiles.Pop();
+			tmp.SetActive(true);
+			tmp.transform.position = currentTile.transform.GetChild(0).transform.GetChild(1).position;
+			currentTile = tmp;
+
+			spawnIndex++;
+		}
+		else if (randomIndex == 0)
 		{
 			GameObject tmp = leftTiles.Pop();
 			tmp.SetActive(true);
 			tmp.transform.position = currentTile.transform.GetChild(0).transform.GetChild(randomIndex).position;
 			currentTile = tmp;
+
+			spawnIndex--;
 		}
 		else if (randomIndex == 1)
 		{
@@ -89,9 +109,11 @@ public class TileManager : MonoBehaviour
 			tmp.SetActive(true);
 			tmp.transform.position = currentTile.transform.GetChild(0).transform.GetChild(randomIndex).position;
 			currentTile = tmp;
+
+			spawnIndex++;
 		}
 
-		int spawnPickup = Random.Range(0, 15);
+		int spawnPickup = Random.Range(0, 10);
 
 		if (spawnPickup == 0)
 		{

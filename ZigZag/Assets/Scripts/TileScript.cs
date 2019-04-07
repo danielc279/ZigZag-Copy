@@ -5,9 +5,17 @@ using UnityEngine;
 public class TileScript : MonoBehaviour {
 
 	private float fallDelay = 0.5f;
+
+	GameObject player;
+
+	private Rigidbody myRB;
+
+	private PlayerScript myPlayerScript;
 	// Use this for initialization
 	void Start () {
-		
+		myRB = gameObject.GetComponent<Rigidbody>();
+		player = GameObject.Find("Player");
+		myPlayerScript = player.GetComponent<PlayerScript>();
 	}
 	
 	// Update is called once per frame
@@ -27,21 +35,26 @@ public class TileScript : MonoBehaviour {
 	IEnumerator FallDown()
 	{
 		yield return new WaitForSeconds(fallDelay);
-		GetComponent<Rigidbody>().isKinematic = false;
-		yield return new WaitForSeconds(2);
-		switch (gameObject.name)
-		{
-			case "LeftTile":
-				TileManager.Instance.LeftTiles.Push(gameObject);
-				gameObject.GetComponent<Rigidbody>().isKinematic = true;
-				gameObject.SetActive(false);
-				break;
+		if (myPlayerScript.IsPlaying){
+			myRB.isKinematic = false;
+			yield return new WaitForSeconds(2);
+			switch (gameObject.name)
+			{
+				case "LeftTile":
+					TileManager.Instance.LeftTiles.Push(gameObject);
+					myRB.isKinematic = true;
+					gameObject.SetActive(false);
+					break;
 
-			case "TopTile":
-				TileManager.Instance.TopTiles.Push(gameObject);
-				gameObject.GetComponent<Rigidbody>().isKinematic = true;
-				gameObject.SetActive(false);
-				break;
+				case "TopTile":
+					TileManager.Instance.TopTiles.Push(gameObject);
+					myRB.isKinematic = true;
+					gameObject.SetActive(false);
+					break;
+				case "StartTile":
+					gameObject.SetActive(false);
+					break;	
+			}
 		}
 
 	}
