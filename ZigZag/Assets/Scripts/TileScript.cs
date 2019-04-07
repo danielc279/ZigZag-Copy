@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TileScript : MonoBehaviour {
 
-	private float fallDelay = 1f;
+	private float fallDelay = 0.5f;
 	// Use this for initialization
 	void Start () {
 		

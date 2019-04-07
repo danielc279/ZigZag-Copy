@@ -9,6 +9,8 @@ public class PlayerScript : MonoBehaviour
 
     private Vector3 dir;
 
+    public GameObject ps;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,5 +36,14 @@ public class PlayerScript : MonoBehaviour
         float amountToMove = speed * Time.deltaTime;
 
         transform.Translate(dir * amountToMove);
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Pickup")
+        {
+            other.gameObject.SetActive(false);
+            Instantiate(ps, transform.position, Quaternion.identity);
+        }
     }
 }

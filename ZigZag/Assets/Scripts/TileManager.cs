@@ -91,6 +91,13 @@ public class TileManager : MonoBehaviour
 			currentTile = tmp;
 		}
 
+		int spawnPickup = Random.Range(0, 15);
+
+		if (spawnPickup == 0)
+		{
+			currentTile.transform.GetChild(1).gameObject.SetActive(true);
+		}
+
 		//currentTile = (GameObject)Instantiate(tilePrefabs[randomIndex],currentTile.transform.GetChild(0).transform.GetChild(randomIndex).position, Quaternion.identity);
 	}
 }
