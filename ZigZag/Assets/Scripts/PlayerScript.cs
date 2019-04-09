@@ -65,6 +65,11 @@ public class PlayerScript : MonoBehaviour
             IsPlaying = true;
             score++; 
             scoreUI.SetText(score.ToString());
+            if (myMenuScript.firstTap == false)
+            {
+                myMenuScript.FirstTap();    
+            }
+            
 
             if (dir == Vector3.forward)
             {

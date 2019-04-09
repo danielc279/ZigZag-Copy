@@ -28,6 +28,8 @@ public class TileManager : MonoBehaviour
 		set { topTiles = value; }
 	}
 
+	public MenuScript myMenuScript;
+
 	public static TileManager Instance
 	{
 		get
@@ -42,7 +44,8 @@ public class TileManager : MonoBehaviour
 
 	// Use this for initialization
 	void Start () 
-	{		
+	{	
+		myMenuScript = GameObject.Find("GameManager").GetComponent<MenuScript>();	
 		CreateTiles(100);
 
 		for (int i = 0; i < 50; i++)
@@ -125,6 +128,6 @@ public class TileManager : MonoBehaviour
 
 	public void ResetGame()
 	{
-		Application.LoadLevel(Application.loadedLevel);
+		myMenuScript.Retry();
 	}
 }
